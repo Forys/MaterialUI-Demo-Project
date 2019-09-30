@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import {} from "@material-ui/core";
 import {
+  Container,
+  Grid,
   List,
   ListItem,
   ListItemText,
@@ -27,8 +29,11 @@ import { pink, blue, green } from "@material-ui/core/colors";
 
 const StyledPaper = styled(Paper)`
   max-width: 400px;
-  margin: 2em;
   padding: 1em;
+  margin-top: 1em;
+  @media (max-width: 768px) {
+    margin: auto;
+  }
 `;
 const InlineTextField = styled(TextField)`
   margin-top: 0;
@@ -88,73 +93,81 @@ class App extends Component {
     return (
       <StylesProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <StyledPaper>
-            <Typography variant="h4" align="center" gutterBottom>
-              Simple List
-            </Typography>
+          <Container gutterTop>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <StyledPaper>
+                  <Typography variant="h4" align="center" gutterBottom>
+                    Simple List
+                  </Typography>
 
-            <Form onSubmit={this.handleCreate}>
-              <InlineTextField
-                name="title"
-                label="Simple List"
-                value={title}
-                onChange={this.handleChange}
-                margin="normal"
-              />
+                  <Form onSubmit={this.handleCreate}>
+                    <InlineTextField
+                      name="title"
+                      label="Simple List"
+                      value={title}
+                      onChange={this.handleChange}
+                      margin="normal"
+                    />
 
-              <Button type="submit" color="primary" variant="contained">
-                Create
-              </Button>
-            </Form>
-            <List>
-              {list.map(({ id, title }) => (
-                <ListItem key={id}>
-                  <ListItemText primary={title} />
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      color="primary"
-                      onClick={() => this.handleDelete(id)}
+                    <Button type="submit" color="primary" variant="contained">
+                      Create
+                    </Button>
+                  </Form>
+                  <List>
+                    {list.map(({ id, title }) => (
+                      <ListItem key={id}>
+                        <ListItemText primary={title} />
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            color="primary"
+                            onClick={() => this.handleDelete(id)}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ))}
+                  </List>
+                </StyledPaper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <StyledPaper>
+                  <Typography variant="h5" align="center" gutterBottom>
+                    Design Options
+                  </Typography>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={lightOn}
+                        onChange={this.handleSwitchChange}
+                        value="lightOn"
+                        inputProps={{ "aria-label": "secondary checkbox" }}
+                      />
+                    }
+                    label="Turn on the light"
+                  />
+                  <StyledFormControl>
+                    <InputLabel htmlFor="primary-color">
+                      Primary Color
+                    </InputLabel>
+                    <Select
+                      value={primaryColor}
+                      onChange={this.handleChange}
+                      inputProps={{
+                        name: "primaryColor",
+                        id: "primary-color"
+                      }}
                     >
-                      <Delete />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </StyledPaper>
-
-          <StyledPaper>
-            <Typography variant="h5" align="center" gutterBottom>
-              {" "}
-              Design Options
-            </Typography>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={lightOn}
-                  onChange={this.handleSwitchChange}
-                  value="lightOn"
-                  inputProps={{ "aria-label": "secondary checkbox" }}
-                />
-              }
-              label="Turn on the light"
-            />
-            <StyledFormControl>
-              <InputLabel htmlFor="primary-color">Primary Color</InputLabel>
-              <Select
-                value={primaryColor}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "primaryColor",
-                  id: "primary-color"
-                }}
-              >
-                <MenuItem value={pink}>Pink</MenuItem>
-                <MenuItem value={blue}>Blue</MenuItem>
-                <MenuItem value={green}>Green</MenuItem>
-              </Select>
-            </StyledFormControl>
-          </StyledPaper>
+                      <MenuItem value={pink}>Pink</MenuItem>
+                      <MenuItem value={blue}>Blue</MenuItem>
+                      <MenuItem value={green}>Green</MenuItem>
+                    </Select>
+                  </StyledFormControl>
+                </StyledPaper>
+              </Grid>
+            </Grid>
+          </Container>
         </ThemeProvider>
       </StylesProvider>
     );
