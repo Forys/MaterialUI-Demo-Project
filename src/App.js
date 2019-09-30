@@ -9,7 +9,13 @@ import {
   Paper,
   Typography,
   TextField,
-  Button
+  Button,
+  Switch,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select
 } from "@material-ui/core";
 
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -17,14 +23,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { Delete } from "@material-ui/icons";
 import { StylesProvider } from "@material-ui/styles";
 import styled from "styled-components";
-import { pink } from "@material-ui/core/colors";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: pink,
-    type: "dark"
-  }
-});
+import { pink, blue, green } from "@material-ui/core/colors";
 
 const StyledPaper = styled(Paper)`
   max-width: 400px;
@@ -40,6 +39,10 @@ const Form = styled.form`
   justify-content: space-evenly;
   margin: 2em auto;
 `;
+const StyledFormControl = styled(FormControl)`
+  display: flex;
+  margin-top: 10px;
+`;
 
 class App extends Component {
   state = {
@@ -49,10 +52,16 @@ class App extends Component {
       { id: 3, title: "Styled Components" },
       { id: 4, title: "Are awesome!" }
     ],
-    title: ""
+    title: "",
+    primaryColor: pink,
+    lightOn: false
   };
   handleChange = ({ target: { name, value } }) =>
     this.setState({ [name]: value });
+
+  handleSwitchChange = () => {
+    this.setState({ lightOn: !this.state.lightOn });
+  };
 
   handleCreate = e => {
     e.preventDefault();
@@ -68,7 +77,14 @@ class App extends Component {
   };
 
   render() {
-    const { title, list } = this.state;
+    const { list, title, primaryColor, lightOn } = this.state;
+    const theme = createMuiTheme({
+      palette: {
+        primary: primaryColor,
+        type: lightOn ? "light" : "dark"
+      }
+    });
+
     return (
       <StylesProvider injectFirst>
         <ThemeProvider theme={theme}>
@@ -105,6 +121,39 @@ class App extends Component {
                 </ListItem>
               ))}
             </List>
+          </StyledPaper>
+
+          <StyledPaper>
+            <Typography variant="h5" align="center" gutterBottom>
+              {" "}
+              Design Options
+            </Typography>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={lightOn}
+                  onChange={this.handleSwitchChange}
+                  value="lightOn"
+                  inputProps={{ "aria-label": "secondary checkbox" }}
+                />
+              }
+              label="Turn on the light"
+            />
+            <StyledFormControl>
+              <InputLabel htmlFor="primary-color">Primary Color</InputLabel>
+              <Select
+                value={primaryColor}
+                onChange={this.handleChange}
+                inputProps={{
+                  name: "primaryColor",
+                  id: "primary-color"
+                }}
+              >
+                <MenuItem value={pink}>Pink</MenuItem>
+                <MenuItem value={blue}>Blue</MenuItem>
+                <MenuItem value={green}>Green</MenuItem>
+              </Select>
+            </StyledFormControl>
           </StyledPaper>
         </ThemeProvider>
       </StylesProvider>
